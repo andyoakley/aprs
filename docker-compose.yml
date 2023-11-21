@@ -1,25 +1,25 @@
 version: '2.0'
 
 services:
-  # aprs-to-ws:
-  #   privileged: true
-  #   build: aprs-to-ws/
-  #   args: ["/dev/ttyUSB0"]
-  #   ports:
-  #   - "13254:13254"
-  #   volumes:
-  #   - /dev/ttyUSB0:/dev/ttyUSB0
+  aprs-to-ws:
+    privileged: true
+    build: aprs-to-ws/
+    command: ["/dev/ttyUSB0"]
+    ports:
+    - "127.0.0.1:13254:13254"
+    volumes:
+    - /dev/ttyUSB0:/dev/ttyUSB0
 
   tileserver:
     build: tileserver/
     command: ["/data/north-america_us.mbtiles"]
     ports:
-    - "13255:8080"
+    - "127.0.0.1:13255:8080"
     volumes:
-    - /mnt/ceph/hoard/osm/maptiler-osm-2020-02-10-v3.11-north-america_us.mbtiles:/data/north-america_us.mbtiles
+    - /home/andy/data/maptiler-osm-2020-02-10-v3.11-north-america_us.mbtiles:/data/north-america_us.mbtiles
 
   aprsweb:
     build: aprsweb/
     ports:
-    - "8080:80"
+    - "127.0.0.1:13256:80"
 

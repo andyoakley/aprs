@@ -1,0 +1,4 @@
+pyserial
+websocket-server
+aprspy
+bitstring

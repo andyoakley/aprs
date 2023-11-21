@@ -12,7 +12,7 @@ services:
 
   tileserver:
     build: tileserver/
-    command: ["/data/north-america_us.mbtiles"]
+    command: ["/data/north-america_us.mbtiles", "-u", "https://packet.n7apo.ampr.org/aprs/tiles/"]
     ports:
     - "127.0.0.1:13255:8080"
     volumes:

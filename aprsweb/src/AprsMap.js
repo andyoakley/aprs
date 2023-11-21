@@ -1,7 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react'
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css'
-import _uniqueId from 'lodash/uniqueId';
 import { usePacketProvider } from './PacketProvider';
 
 
@@ -32,14 +31,14 @@ export default function AprsMap(props) {
             }
 
             for (let packet of packets.position) {
-                var marker = new maplibregl.Popup({closeOnClick: false, closeOnMove: false})
+                const marker = new maplibregl.Popup({closeOnClick: false, closeOnMove: false})
                     .setLngLat([packet.longitude, packet.latitude])
                     .setHTML(packet.source)
                     .addTo(map);
                 setMarkers(old => [...old, marker])
             }
         }
-    }, [packets.position])
+    }, [packets.position, markers, map])
     
     return (<div ref={mapRef} id="aprsmap"  {...props}>map</div>)
 

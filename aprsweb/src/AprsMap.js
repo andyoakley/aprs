@@ -2,70 +2,45 @@ import React, {useEffect, useState, useRef} from 'react'
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css'
 import _uniqueId from 'lodash/uniqueId';
+import { usePacketProvider } from './PacketProvider';
 
 
-function AprsMap(props) {
-    const [id] = useState(_uniqueId("map-"));
+export default function AprsMap(props) {
     const [map, setMap] = useState();
     const mapRef = useRef(null);
-
-    const ws = useRef(null);
-
-
+    const [markers, setMarkers] = useState([])
+    const packets = usePacketProvider();
 
     useEffect(() => {
         if (mapRef.current.children.length === 0) {
             setMap(
                 new maplibregl.Map({
-                    container: id,
+                    container: "aprsmap", 
                     style: process.env.REACT_APP_MAP_STYLESHEET,
                     center: [-122.32945, 47.60357], // starting position [lng, lat]
                     zoom: 8.65 // starting zoom
                     })
             );
         }
-    }, [id]);
-
+    }, []);
 
     useEffect(() => {
-        ws.current = new WebSocket(process.env.REACT_APP_APRS_WEBSOCKET);
+        if (map) {
+            // TODO: clear and add is primitive, should do changes only here
+            for (let oldmarker of markers) {
+                oldmarker.remove();
+            }
 
-        ws.current.onmessage = event => {
-            const e = JSON.parse(event.data);
-
-
-            if (e.type === "position") {
-                console.log(map, e);
+            for (let packet of packets.position) {
                 var marker = new maplibregl.Popup({closeOnClick: false, closeOnMove: false})
-                    .setLngLat([e.longitude, e.latitude])
-                    .setHTML(e.source)
+                    .setLngLat([packet.longitude, packet.latitude])
+                    .setHTML(packet.source)
                     .addTo(map);
-
-                    /*
-                let el = document.createElement("div");
-                let content = document.createTextNode(e.raw);
-                el.appendChild(content);
-                let container = document.getElementById("log");
-                container.insertBefore(el, container.firstChild);
-                */
-
-                window.setTimeout(() => {
-                 //       container.removeChild(el);
-                        marker.remove();
-                }, 10*60*1000 )
+                setMarkers(old => [...old, marker])
             }
         }
-
-        const same_for_close = ws.current;
-        return () => {
-            // cleanup
-            if (same_for_close.readyState !== WebSocket.CLOSED) 
-                same_for_close.close();
-        }
-    }, [map])
+    }, [packets.position])
     
-    return (<div ref={mapRef} id={id} {...props}>map</div>)
+    return (<div ref={mapRef} id="aprsmap"  {...props}>map</div>)
 
 }
-
-export default AprsMap;

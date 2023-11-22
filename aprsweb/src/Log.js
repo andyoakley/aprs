@@ -1,6 +1,7 @@
 import { usePacketProvider } from "./PacketProvider";
 import './Log.css'
 import { useStateProvider } from "./StateProvider";
+import AprsIcon from "./AprsIcon";
 
 
 
@@ -18,7 +19,9 @@ export default function PacketLog() {
             <div style={{gridArea: "position"}}>
                 <h2>Positions</h2>
                 {packets.position.map((packet, i) => <div key={`position-${i}`}>
-                    <Callsign callsign={packet.source}></Callsign>: {packet.comment}
+                    <AprsIcon {...packet}></AprsIcon>
+                    <Callsign callsign={packet.source}></Callsign>: 
+                    {packet.comment}
                 </div>)}
             </div>
             <div style={{gridArea: "beacon"}}>
@@ -30,7 +33,7 @@ export default function PacketLog() {
             <div style={{gridArea: "message"}}>
                 <h2>Messages</h2>
                 {packets.message.map((packet, i) => <div key={`message-${i}`}>
-                    <Callsign callsign={packet.source}></Callsign>: {packet.comment}
+                    <Callsign callsign={packet.source}></Callsign>: {packet.message}
                 </div>)}
             </div>
         </div>

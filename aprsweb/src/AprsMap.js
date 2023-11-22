@@ -4,6 +4,8 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { usePacketProvider } from './PacketProvider';
 import { useStateProvider } from './StateProvider';
 import "./AprsMap.css"
+import ReactDomServer from 'react-dom/server'
+import AprsIcon from './AprsIcon';
 
 
 export default function AprsMap(props) {
@@ -27,6 +29,7 @@ export default function AprsMap(props) {
     }, []);
 
     useEffect(() => {
+        console.log(packets);
         if (map) {
             // TODO: clear and add is primitive, should do changes only here
             for (let oldmarker of markers) {
@@ -35,9 +38,12 @@ export default function AprsMap(props) {
 
 
             for (let packet of packets.position) {
-                const html = (state.selectedCallsigns.includes(packet.source)) ?
-                    `<div style='background-color:green'>${packet.source}</div>` :
-                    `<div>${packet.source}</div>`;
+                const html = ReactDomServer.renderToStaticMarkup(
+                    <div style={{backgroundColor: (state.selectedCallsigns.includes(packet.source)?"green":"")}}>
+                        <AprsIcon {...packet}></AprsIcon>
+                        {packet.source}
+                    </div>
+                );
 
                 const marker = new maplibregl.Popup({closeOnClick: false, closeOnMove: false})
                     .setLngLat([packet.longitude, packet.latitude])

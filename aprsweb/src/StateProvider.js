@@ -25,7 +25,6 @@ export const initialState = {
 }
 
 function reducer(prevState, action) {
-    console.log(action)
     switch (action.type) {
         case 'set':
             return {...prevState, [action.key]: action.value};

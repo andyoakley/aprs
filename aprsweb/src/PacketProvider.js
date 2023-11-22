@@ -7,10 +7,22 @@ export const PacketProvider = ({children}) => {
 
     useEffect(() => {
         const socket = new WebSocket(process.env.REACT_APP_APRS_WEBSOCKET);
-        socket.onmessage = event => {
+        
+        socket.addEventListener("message", event => {
             const e = JSON.parse(event.data);
             dispatch({type: e.type, packet: e})
-        }
+        });
+
+        socket.addEventListener("open", event => {
+            dispatch({type: "websocket", state: "open"})
+        })
+        socket.addEventListener("error", event => {
+            dispatch({type: "websocket", state: "error"})
+        })
+        socket.addEventListener("close", event => {
+            dispatch({type: "websocket", state: "close"})
+        })
+
         return () => { socket.close(); }
     }, [])
 
@@ -30,7 +42,8 @@ export const initialState = {
     message: [],
     status: [],
     beacon: [],
-    gps: {}
+    gps: {},
+    websocket: null
 }
 
 function reducer(prevState, action) {
@@ -46,8 +59,10 @@ function reducer(prevState, action) {
             return {...prevState, status: [action.packet, ...prevState.status]}
         case 'beacon':
             return {...prevState, beacon: [action.packet, ...prevState.beacon]}
+        case 'websocket':
+            return {...prevState, websocket: action.state}
         default:
-            console.log("unknown action ", action.type)
+            console.log("unknown action ", action.type, action)
             return prevState;
     }
 

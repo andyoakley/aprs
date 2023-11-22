@@ -1,30 +1,65 @@
-import { createContext, useContext, useEffect, useReducer } from "react"
+import { createContext, useRef, useContext, useState, useEffect, useReducer } from "react"
 
 export const PacketContext = createContext();
 
 export const PacketProvider = ({children}) => {
     const [state, dispatch ] = useReducer(reducer, initialState);
 
-    useEffect(() => {
+    const socketHandleRef = useRef();
+    const timeoutHandleRef = useRef();
+
+    const socketOpenListener = event => {
+        dispatch({type: "websocket", state: "open"})
+
+        // success, can cancel timeout
+        if (timeoutHandleRef.current) { 
+            clearTimeout(timeoutHandleRef.current);
+            timeoutHandleRef.current = null;
+        }
+    }
+
+    const socketMessageListener = event => {
+        const e = JSON.parse(event.data);
+        dispatch({type: e.type, packet: e})
+    }
+
+    const timeoutHandler = () => {
+        clearTimeout(timeoutHandleRef.current);
+        timeoutHandleRef.current = null;
+
+        tryOpenSocket();
+    }
+
+    const closeHandler = () => {
+        // time handler will retry when it expires, don't want to try and open it twice
+        if (timeoutHandleRef.current) return;
+
+        // otherwise, we got closed when it was actually open, so retry opening it.
+        tryOpenSocket();
+    }
+
+    const tryOpenSocket = event => {
+        dispatch({type: "websocket", state: "close"})
+
+        const th = setTimeout(timeoutHandler, 5000);
+        timeoutHandleRef.current = th;
+
         const socket = new WebSocket(process.env.REACT_APP_APRS_WEBSOCKET);
-        
-        socket.addEventListener("message", event => {
-            const e = JSON.parse(event.data);
-            dispatch({type: e.type, packet: e})
-        });
+        socketHandleRef.current = socket;
 
-        socket.addEventListener("open", event => {
-            dispatch({type: "websocket", state: "open"})
-        })
-        socket.addEventListener("error", event => {
-            dispatch({type: "websocket", state: "error"})
-        })
-        socket.addEventListener("close", event => {
-            dispatch({type: "websocket", state: "close"})
-        })
+        socket.addEventListener("open", socketOpenListener);
+        socket.addEventListener("message", socketMessageListener);
+        socket.addEventListener("close", closeHandler);
+    }
 
-        return () => { socket.close(); }
+    useEffect(() => {
+        tryOpenSocket();
+        return () => {
+            if (socketHandleRef.current) { socketHandleRef.current.close();  }
+            if (timeoutHandleRef.current) { clearTimeout(timeoutHandleRef.current); }
+        }
     }, [])
+
 
     return (
         <PacketContext.Provider value={state}>

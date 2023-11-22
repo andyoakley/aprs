@@ -3,7 +3,7 @@
   height: 100vh;
 
   grid-template-columns: 1fr 350px;
-  grid-template-rows: 50px auto 50px;
+  grid-template-rows: 50px auto 20px;
   grid-template-areas: 
     "header   header"
     "map      log"
@@ -11,11 +11,12 @@
   ;
 }
 
+/* portrait mobile */
 @media screen and (max-width: 1000px) {
   .App {
     height: unset;
     grid-template-columns: 1fr 50px;
-    grid-template-rows: 50px 50vh 1fr 50px;
+    grid-template-rows: 50px 50vh 1fr;
 
     grid-template-areas:
       "header status"
@@ -23,6 +24,21 @@
       "log    log";
 
   }
+}
+
+/* landscape mobile */
+@media screen and (max-width: 900px) and (orientation: landscape) {
+  .App {
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 20px 1fr;
+    height: 100vh;
+
+    grid-template-areas:
+      "map    header"
+      "map    log"
+      "map    status";
+  }
+
 }
 
 header {

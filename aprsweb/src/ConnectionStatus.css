@@ -1,6 +1,8 @@
 .conn_status {
     grid-area: status;
     text-align: center;
+    overflow: hidden;
+    font-size: 8pt;
 }
 
 .conn_status.open {

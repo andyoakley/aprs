@@ -2,6 +2,8 @@
     display: grid;
     grid-area: log;
 
+    background: #efefef;
+
     height: 100%;
     grid-template-rows: 50px 1fr 1fr 1fr 25px;
     grid-template-areas: 
@@ -12,9 +14,18 @@
         ;
 
     overflow-x: hidden;
-    overflow-y: hidden;
+    overflow-y: auto;
 }
 
-.log > div {
-    overflow-y: auto;
+.log > div > div {
+    padding: 0 0.5em 0 0.5em;
+    border-bottom: 1px dotted gray;
+}
+
+.log > div > h2 {
+    margin: 0;
+    padding: 0.5em;
+    background: #dedede;
+    color: black;
+    font-size: 8pt;
 }

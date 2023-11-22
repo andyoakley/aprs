@@ -27,6 +27,12 @@ export default function PacketLog() {
                     <Callsign callsign={packet.source}></Callsign>: {packet.comment}
                 </div>)}
             </div>
+            <div style={{gridArea: "message"}}>
+                <h2>Messages</h2>
+                {packets.message.map((packet, i) => <div key={`message-${i}`}>
+                    <Callsign callsign={packet.source}></Callsign>: {packet.comment}
+                </div>)}
+            </div>
         </div>
     )
 }

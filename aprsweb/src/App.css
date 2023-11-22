@@ -3,16 +3,34 @@
   height: 100vh;
 
   grid-template-columns: 1fr 350px;
-  grid-template-rows: 50px auto;
+  grid-template-rows: 50px auto 50px;
   grid-template-areas: 
     "header   header"
     "map      log"
+    "map      status"
   ;
+}
+
+@media screen and (max-width: 1000px) {
+  .App {
+    height: unset;
+    grid-template-columns: 1fr 50px;
+    grid-template-rows: 50px 50vh 1fr 50px;
+
+    grid-template-areas:
+      "header status"
+      "map    map"
+      "log    log";
+
+  }
 }
 
 header {
   grid-area: header;
   background: lightblue;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
 }
 

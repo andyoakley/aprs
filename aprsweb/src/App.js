@@ -1,5 +1,6 @@
 import './App.css';
 import AprsMap from './AprsMap';
+import ConnectionStatus from './ConnectionStatus';
 import Log from './Log'
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
       <header>N7APO APRS map</header>
       <AprsMap></AprsMap>    
       <Log></Log>
+      <ConnectionStatus></ConnectionStatus>
     </div>
   );
 }

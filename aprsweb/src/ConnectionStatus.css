@@ -1,0 +1,13 @@
+.conn_status {
+    grid-area: status;
+    text-align: center;
+}
+
+.conn_status.open {
+    background: lightgreen;
+}
+
+.conn_status.close {
+    background: red;
+    color: white;
+}

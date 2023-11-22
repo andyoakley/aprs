@@ -1,5 +1,7 @@
 .log {
     display: grid;
+    grid-area: log;
+
     height: 100%;
     grid-template-rows: 50px 1fr 1fr 1fr 25px;
     grid-template-areas: 
@@ -7,7 +9,6 @@
         "position"
         "beacon"
         "message"
-        "status"
         ;
 
     overflow-x: hidden;

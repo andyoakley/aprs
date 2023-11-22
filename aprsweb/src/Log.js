@@ -27,17 +27,10 @@ export default function PacketLog() {
                     <Callsign callsign={packet.source}></Callsign>: {packet.comment}
                 </div>)}
             </div>
-            <div style={{gridArea: "status"}}>
-                <ConnectionStatus status={packets.websocket}></ConnectionStatus>
-            </div>
         </div>
     )
 }
 
-function ConnectionStatus({status}) {
-    const bg = status === "open" ? "lightgreen" : "red";
-    return (<div style={{backgroundColor: bg, height: "100%"}}>{status}</div>)
-}
 
 function Callsign({callsign}) {
     const [state, dispatch] = useStateProvider();

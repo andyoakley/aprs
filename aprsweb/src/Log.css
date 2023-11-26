@@ -17,6 +17,16 @@
     overflow-y: auto;
 }
 
+/* landscape big */
+@media screen and (min-width: 1000px) and (orientation: portrait) {
+    .log {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-areas: 
+            "gps gps gps"
+            "position beacon message";  
+    }
+}
+
 .log > div > div {
     padding: 0 0.5em 0 0.5em;
     border-bottom: 1px dotted gray;

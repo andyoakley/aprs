@@ -41,6 +41,21 @@
 
 }
 
+/* landscape big */
+@media screen and (min-width: 1000px) and (orientation: portrait) {
+  .App {
+    height: unset;
+    grid-template-columns: 1fr 50px;
+    grid-template-rows: 50px 65vh 1fr;
+
+    grid-template-areas:
+      "header status"
+      "map    map"
+      "log    log";
+
+  }
+}
+
 header {
   grid-area: header;
   background: lightblue;

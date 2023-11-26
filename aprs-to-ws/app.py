@@ -5,7 +5,7 @@ import serial
 import threading
 from aprspy import APRS, PositionPacket, MessagePacket, StatusPacket, BeaconPacket, ParseError, UnsupportedError
 import json
-from datetime import datetime
+import time
 
 recent_packet = threading.Event()
 

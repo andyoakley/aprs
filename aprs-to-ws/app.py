@@ -6,6 +6,7 @@ import threading
 from aprspy import APRS, PositionPacket, MessagePacket, StatusPacket, BeaconPacket, ParseError, UnsupportedError
 import json
 import time
+import sys
 
 recent_packet = threading.Event()
 
@@ -48,12 +49,13 @@ def serial_handle(serialport, server):
             line = ser.read_until(b'\r').strip().decode("ascii")
         except UnicodeDecodeError:
             print("Malformed line")
+        
+        recent_packet.set()
 
         if not line.startswith("$") and len(line)>0:
             try:
                 packet = APRS.parse(line)
                 share_packet(server, packet, line)
-                recent_packet.set()
             except ParseError:
                 print("parseerror", line)
             except UnsupportedError:
@@ -76,7 +78,9 @@ def watchdog_handle(server):
     recent_packet.set()
     while True:
         if not recent_packet.is_set():
+            print("Watchdog failed, shutting down")
             server.shutdown_gracefully()
+            sys.exit()
 
         recent_packet.clear()
         time.sleep(30)

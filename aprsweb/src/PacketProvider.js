@@ -27,6 +27,11 @@ export const PacketProvider = ({children}) => {
         clearTimeout(timeoutHandleRef.current);
         timeoutHandleRef.current = null;
 
+        if (socketHandleRef.current) {
+            socketHandleRef.current.close();
+            socketHandleRef.current = null;
+        }
+
         tryOpenSocket();
     }
 

@@ -90,7 +90,7 @@ function reducer(prevState, action) {
     switch (action.type) {
         case 'gps':
             const parts = action.packet.raw.split(",")
-            return {...prevState, gps: { [parts[0]]: action.packet, ...prevState.gps}}
+            return {...prevState, gps: { ...prevState.gps, [parts[0]]: action.packet}}
         case 'position':
             return {...prevState, position: [action.packet, ...prevState.position]}
         case 'message':

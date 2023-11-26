@@ -29,7 +29,6 @@ export default function AprsMap(props) {
     }, []);
 
     useEffect(() => {
-        console.log(packets);
         if (map) {
             // TODO: clear and add is primitive, should do changes only here
             for (let oldmarker of markers) {

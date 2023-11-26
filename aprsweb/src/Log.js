@@ -2,6 +2,8 @@ import { usePacketProvider } from "./PacketProvider";
 import './Log.css'
 import { useStateProvider } from "./StateProvider";
 import AprsIcon from "./AprsIcon";
+import GpsClock from "./GpsClock";
+import GpsFix from './GpsFix';
 
 
 
@@ -12,9 +14,8 @@ export default function PacketLog() {
     return (
         <div className="log">
             <div style={{gridArea: "gps"}}>
-                {packets.gps['$GPRMC']?.raw}
-                <br />
-                {packets.gps['$GPGGA']?.raw}
+                <GpsClock></GpsClock>
+                <GpsFix></GpsFix>
             </div>
             <div style={{gridArea: "position"}}>
                 <h2>Positions</h2>

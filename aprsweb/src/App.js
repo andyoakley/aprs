@@ -3,7 +3,18 @@ import AprsMap from './AprsMap';
 import ConnectionStatus from './ConnectionStatus';
 import Log from './Log'
 
-function App() {
+import { useEffect } from "react";
+import { useWakeLock } from 'react-screen-wake-lock';
+
+export default function App() {
+
+  // keep screen on
+  const { isSupported, released, request, release } = useWakeLock();
+  useEffect(() => {
+      request()
+      return () => release();
+  }, []);
+
   return (
     <div className="App">
       <header>N7APO APRS map</header>
@@ -13,5 +24,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
